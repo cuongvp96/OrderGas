@@ -30,13 +30,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     List<Item_GasHome> ds =  null;
     private ClickListener clickListener;
     Context context;
-
+    int position;
     public RecyclerViewAdapter(ArrayList<Item_GasHome> arrayList, ClickListener clickListener, Context context) {
         this.arrayList = arrayList;
         this.clickListener = clickListener;
         this.context = context;
     }
-
+    public Object getItem(final int position) {
+        this.position=position;
+        return ds.get(position);
+    }
     public RecyclerViewAdapter(List<Item_GasHome> ds, Context context,ClickListener clickListener) {
         this.ds = ds;
         this.arrayList = new ArrayList<>();
@@ -65,10 +68,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     }
 
-
-    public Object getItem(final int position) {
-        return ds.get(position);
-    }
     @Override
     public int getItemCount() {
         return ds.size();
@@ -94,6 +93,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             lnCall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
                     callIntent.setData(Uri.parse("tel:"+txtSDT.getText().toString()));
 
@@ -109,7 +109,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             lnComment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sendSMS("0979207899", "Mã số xác nhận cửa hàng của bạn trên app Order Gas là : 0000");
+                    Intent intent = new Intent(context,CategoryGas_Activity.class);
+                    Item_GasHome gas = (Item_GasHome) getItem(position);
+                    intent.putExtra("detail",gas);
+                    context.startActivity(intent);
                 }
             });
 
